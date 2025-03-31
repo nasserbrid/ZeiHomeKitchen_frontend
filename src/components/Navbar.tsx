@@ -42,7 +42,7 @@ class Navbar extends Component<NavbarProps> {
         {/* Liens de navigation */}
         <div className="navbar-links">
           <Link to="/" className="nav-link">Accueil</Link>
-          <Link to="/catalogue" className="nav-link">Catalogue</Link>
+          <Link to="/plats" className="nav-link">Catalogue</Link>
           <Link to="/reservation" className="nav-link">Réservation</Link>
           <Link to="/dashboard" className="nav-link">Dashboard</Link>
         </div>
