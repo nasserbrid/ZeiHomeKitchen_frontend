@@ -24,15 +24,26 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
       plats: [],
       loading: true,
       error: null,
+      searchQuery: "",
     };
     this.platsService = new PlatsService();
 
     //Je lie la méthode handlePlatClick() au contexte de la classe
     this.handlePlatClick = this.handlePlatClick.bind(this);
+
+    //Je lie la méthode handleSearch() au contexte de la classe
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   public async componentDidMount() {
     await this.fetchPlats();
+  }
+
+  public componentDidUpdate(prevProps: PlatsPageProps) {
+    if (prevProps.searchQuery !== this.props.searchQuery) {
+      console.log("Mise à jour de searchQuery :", this.props.searchQuery);
+      this.setState({ searchQuery: this.props.searchQuery || "" });
+    }
   }
 
   private async fetchPlats(): Promise<void> {
@@ -56,6 +67,12 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
     }
   }
 
+  private handleSearch(query: string): void 
+  {
+    this.setState({ searchQuery: query });
+  }
+  
+
   private handlePlatClick(idPlat: number): void
   {
     // Utilisez la navigation de votre choix (history.push ou window.location)
@@ -68,12 +85,28 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
     //Initialisation de l'état
     const { plats, loading, error } = this.state;
 
-    console.log("Plats:", plats); // Vérifier le contenu de plats
-    console.log("Loading:", loading); // Vérifier l'état de chargement
-    console.log("Error:", error); // Vérifier l'erreur
+    // Je vérifie le contenu de plats
+    console.log("Plats:", plats); 
+    //Je vérifie l'état de chargement
+    console.log("Loading:", loading); 
+    //Jé vérifie s'il y a  une erreur
+    console.log("Error:", error); 
 
     if (loading) return <div className="loading">Chargement des plats...</div>;
     if (error) return <div className="error">{error}</div>;
+
+    console.log("searchQuery reçu par PlatsPage :", this.state.searchQuery);
+    const filteredPlats = this.state.plats.filter((plat) =>
+      //"i" signifie insensible à la casse
+      new RegExp(this.state.searchQuery, "i").test(
+        //.normalize("NFD").replace(/[\u0300-\u036f]/g, "") permet d'ignorer les accents.
+        plat.nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Ignore les accents
+      )
+      
+    );
+
+    console.log("Plats après filtrage :", filteredPlats);
+    
 
     return (
       <div className="home-container">
@@ -82,7 +115,7 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
         </div>
 
         <div className="plat-container">
-          {plats.map((plat) => (
+          {filteredPlats.map((plat) => (
             <PlatCard
               key={plat.idPlat}
               plat={plat}

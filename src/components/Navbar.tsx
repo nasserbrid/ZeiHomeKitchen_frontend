@@ -1,23 +1,39 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import { NavbarProps} from "./NavbarProps";
+import { NavbarStates } from "./NavbarStates";
 
 
-class Navbar extends Component<NavbarProps> {
+class Navbar extends Component<NavbarProps, NavbarStates> {
   constructor(props: NavbarProps) {
     super(props);
-    
+    this.state = {
+      searchQuery: ""
+    };
 
     //Je lie la méthode handleLogout() au contexte de la classe
     this.handleLogout = this.handleLogout.bind(this);
+
+    //Je lie la méthode handleSearchChange() au contexte de la classe
+    this.handleSearchChange = this.handleSearchChange.bind(this);
+
   }
 
 
-  public handleLogout(){
+  public handleLogout()
+  {
     if (this.props.onLogout) {
       this.props.onLogout();
      
     }
+  }
+
+  public handleSearchChange(event: React.ChangeEvent<HTMLInputElement>)
+  {
+    const query = event.target.value;
+    this.setState({ searchQuery: query });
+    //Permet d'envoyer la recherche au parent
+    this.props.onSearch(query);
   }
 
   // handleLogout = () => {
@@ -49,7 +65,9 @@ class Navbar extends Component<NavbarProps> {
 
         
         <div className="search-container">
-          <input type="text" className="search-input" placeholder="Rechercher..." />
+          <input type="text" className="search-input" placeholder="Rechercher..." 
+          value={this.state.searchQuery} 
+          onChange={this.handleSearchChange}/>
         </div>
 
 

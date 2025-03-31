@@ -25,14 +25,17 @@ class App extends Component<{}, AppState> {
     super(props);
     this.state = {
       token: localStorage.getItem('token'),
-      username: localStorage.getItem('username')
+      username: localStorage.getItem('username'),
+      searchQuery: ""
     };
 
     // Je lie les méthodes au contexte de la classe
     this.handleAuthSucess = this.handleAuthSucess.bind(this);
     this.handleLogout = this.handleLogout.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    
   }
-  
+
   public handleAuthSucess(token: string, username: string): void {
     localStorage.setItem('token', token);
     localStorage.setItem('username', username);
@@ -45,13 +48,20 @@ class App extends Component<{}, AppState> {
     this.setState({ token: null, username: null });
   }
 
+   public handleSearch(searchQuery: string): void {
+    console.log("handleSearch appelée avec :", searchQuery);
+    this.setState({ searchQuery });
+  }
+
   render() {
-    const { token, username } = this.state;
+    
+    const { token, username, searchQuery } = this.state;
+    console.log("searchQuery dans le state :", this.state.searchQuery);
     const isLoggedIn = !!token; // Vérifie si l'utilisateur est connecté
 
     return (
       <div className="app">
-        <Navbar isLoggedIn={isLoggedIn} onLogout={this.handleLogout} /> 
+        <Navbar isLoggedIn={isLoggedIn} onLogout={this.handleLogout} onSearch={this.handleSearch}  /> 
         
         {/* Utilisation de Routes pour gérer la navigation */}
         <main className="app-content">
@@ -59,7 +69,7 @@ class App extends Component<{}, AppState> {
             {isLoggedIn ? (
               <>
                 {/* Route pour la page des plats */}
-                <Route path="/plats" element={<PlatsPage plats={[]} />} />
+                <Route path="/plats" element={<PlatsPage searchQuery={searchQuery} />} />
                 {/* Route pour les détails d'un plat */}
                 <Route path="/plats/:idPlat" element={<PlatDetailPage/>} />
                 {/* Route pour la page d'accueil */}
