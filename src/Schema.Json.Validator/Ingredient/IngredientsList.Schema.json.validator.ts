@@ -4,14 +4,14 @@ export const ingredientsListSchema = {
     items: {
       type: "object",
       properties: {
-        idIngredient: { type: "number" },
-        nom: { type: "string" },
-        platIds: {
+        IdIngredient: { type: "number" },
+        Nom: { type: "string" },
+        PlatIds: {
           type: "array",
           items: { type: "number" },
         },
       },
-      required: ["idIngredient", "nom", "platIds"],
+      required: ["idIngredient", "nom"],
       additionalProperties: false,
     },
   };

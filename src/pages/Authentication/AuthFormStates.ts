@@ -10,6 +10,7 @@ export type AuthFormState ={
   password: string;
   error: string | null;
   loading: boolean;
+  successMessage: string;
 }
 
 // export interface AuthFormState {

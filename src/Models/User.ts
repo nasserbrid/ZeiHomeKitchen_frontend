@@ -1,21 +1,23 @@
 export type User = {
     id: string;
-    email: string;
-    firstName?: string;
-    lastName?: string;
+    username:string;
+    Nom?: string;
+    Prenom?: string;
+    Email: string;
+    
   }
   
   export type LoginRequest = {
     username: string;
-    password: string;
+    Password: string;
   }
   
   export type RegisterRequest ={
     username: string,
-    email: string;
-    nom: string;
-    prenom: string;
-    password: string;
+    Email: string;
+    Nom: string;
+    Prenom: string;
+    Password: string;
     
   }
   

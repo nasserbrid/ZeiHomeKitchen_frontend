@@ -1,7 +1,7 @@
 export type Ingredient = {
-    idIngredient: number;
-    nom: string;
-    platsIds:number[];
+    IdIngredient: number;
+    Nom: string;
+    PlatsIds:number[];
   }
 
 export type IngredientResponse = {

@@ -1,13 +1,13 @@
-import { ingredientsByPlatSchema } from './../Schema.Json.Validator/IngredientsByPlat.Schema.json.validator';
-import { platListSchema } from './../Schema.Json.Validator/PlatList.Schema.json.validator';
-import { Constants } from "../Constants/constant";
-import { Ingredient } from "../Models/Ingredient";
-import { Plat } from "../Models/Plat";
-import IPlatsService from "./IPlatsService";
+import { IngredientsByPlatSchema } from '../../Schema.Json.Validator/Plat/IngredientsByPlat.Schema.json.validator';
+import { PlatListSchema } from '../../Schema.Json.Validator/Plat/PlatList.Schema.json.validator';
+import { Constants } from "../../Constants/constant";
+import { Ingredient } from "../../Models/Ingredient";
+import { Plat } from "../../Models/Plat";
+import IPlatsService from "././IPlatsService";
 import Ajv,{ ValidateFunction } from 'ajv';
 
 
-import { platSchema } from '../Schema.Json.Validator/Plat.Schema.json.validator';
+import { PlatSchema } from '../../Schema.Json.Validator/Plat/Plat.Schema.json.validator';
 
 export default class PlatsService implements IPlatsService {
   private ajv: Ajv;
@@ -21,9 +21,9 @@ export default class PlatsService implements IPlatsService {
    */
   constructor() {
     this.ajv = new Ajv();
-    this.validatePlatList = this.ajv.compile(platListSchema);
-    this.validatePlat = this.ajv.compile(platSchema);
-    this.validateIngredientsByPlat = this.ajv.compile(ingredientsByPlatSchema);
+    this.validatePlatList = this.ajv.compile(PlatListSchema);
+    this.validatePlat = this.ajv.compile(PlatSchema);
+    this.validateIngredientsByPlat = this.ajv.compile(IngredientsByPlatSchema);
   }
 
   /**
@@ -57,7 +57,7 @@ export default class PlatsService implements IPlatsService {
    * Méthode qui récupère une liste de plats depuis l'API
    * @returns
    */
-  public async GetPlats(): Promise<Plat[]> {
+  public async GetAllPlats(): Promise<Plat[]> {
     try {
       const plats = await this.fetchData<Plat[]>(`${Constants.API_URL_PLATS}`);
       
@@ -65,11 +65,11 @@ export default class PlatsService implements IPlatsService {
       const valid = this.validatePlatList(plats);
       if (!valid) {
         console.error(this.validatePlatList.errors);
-        throw new Error("Les données des plats ne sont pas conformes au schéma");
+        throw new Error("Les données des plats ne sont pas conformes au PlatListSchema");
       }
 
       console.log(plats);
-      return plats;
+      return Promise.resolve(plats);
     } catch (error) {
       console.error("N'arrive pas à récupérer tous les plats", error);
       return Promise.reject(error);
@@ -78,24 +78,24 @@ export default class PlatsService implements IPlatsService {
 
   /**
    * Méthode qui récupère un plat par son ID.
-   * @param idPlat
+   * @param IdPlat
    * @returns
    */
-  public async GetPlatByD(idPlat: number): Promise<Plat> {
+  public async GetPlatByID(IdPlat: number): Promise<Plat> {
     try {
       const platById = await this.fetchData<Plat>(
-        `${Constants.API_URL_PLATS}/${idPlat}`
+        `${Constants.API_URL_PLATS}/${IdPlat}`
       );
 
       // Validation des données
       const valid = this.validatePlat(platById);
       if (!valid) {
         console.error(this.validatePlat.errors);
-        throw new Error("Les données du plat ne sont pas conformes au schéma");
+        throw new Error("Les données du plat ne sont pas conformes au PlatSchéma");
       }
 
       console.log(platById);
-      return platById;
+      return Promise.resolve(platById);
     } catch (error) {
       console.error("N'arrive pas à récupérer un seul plat par son id", error);
       return Promise.reject(error);
@@ -104,24 +104,24 @@ export default class PlatsService implements IPlatsService {
 
   /**
    * Méthode qui récupère les ingrédients associés à un plat.
-   * @param idPlat
+   * @param IdPlat
    * @returns
    */
-  public async GetIngredientsByPlatId(idPlat: number): Promise<Ingredient[]> {
+  public async GetIngredientsByPlatId(IdPlat: number): Promise<Ingredient[]> {
     try {
       const platIdIngredient = await this.fetchData<Ingredient[]>(
-        `${Constants.API_URL_PLATS}/${idPlat}/ingredients`
+        `${Constants.API_URL_PLATS}/${IdPlat}/ingredients`
       );
 
       // Validation des données
       const valid = this.validateIngredientsByPlat(platIdIngredient);
       if (!valid) {
         console.error(this.validateIngredientsByPlat.errors);
-        throw new Error("Les données des ingrédients ne sont pas conformes au schéma");
+        throw new Error("Les données des ingrédients ne sont pas conformes au IngredientsByPlatIdSchéma");
       }
 
       console.log(platIdIngredient);
-      return platIdIngredient;
+      return Promise.resolve(platIdIngredient);
     } catch (error) {
       console.error(
         "N'arrive pas à récupérer les ingrédients pour un plat",

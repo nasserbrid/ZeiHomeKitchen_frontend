@@ -1,4 +1,4 @@
-import { AuthResponse, LoginRequest, RegisterRequest } from "../Models/User";
+import { AuthResponse, LoginRequest, RegisterRequest } from "../../Models/User";
 
 export default interface IAuthService {
   GetLogin(credentials: LoginRequest): Promise<AuthResponse>;

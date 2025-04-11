@@ -5,7 +5,7 @@
   --text-color: #333333;
   --error-color: #d93025;
   --success-color: #0f9d58;
-  --accent-color: #4EB0B5;
+  --accent-color: #4eb0b5;
 }
 
 * {
@@ -15,7 +15,7 @@
 }
 
 body {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   background-color: var(--background-color);
   color: var(--text-color);
 }
@@ -69,26 +69,26 @@ body {
 }
 
 .logo-text {
-  font-family: 'Brush Script MT', cursive;
+  font-family: "Brush Script MT", cursive;
   color: var(--secondary-color);
   font-size: 1.5rem;
   margin: 0;
 }
 
 .navbar-links {
-  display: flex; /* Utiliser flex pour l'espacement */
-  gap: 2rem; /* Ajouter de l'espace entre les liens */
+  display: flex;
+  gap: 2rem;
 }
 
 .nav-link {
-  color: white; /* Couleur du texte */
-  text-decoration: none; /* Supprimer le soulignement */
-  font-weight: bold; /* Mettre le texte en gras */
-  transition: color 0.3s ease; /* Ajouter une transition pour un effet au survol */
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
 }
 
 .nav-link:hover {
-  color: var(--accent-color); /* Changer la couleur au survol */
+  color: var(--accent-color);
 }
 
 .navbar-actions {
@@ -123,21 +123,20 @@ body {
 .search-container {
   display: flex;
   align-items: center;
-  margin: 0 1rem; /* Espace à gauche et à droite */
+  margin: 0 1rem;
 }
 
 .search-input {
-  padding: 0.5rem; /* Ajustez le padding si nécessaire */
+  padding: 0.5rem;
   border: 1px solid var(--secondary-color);
-  border-radius: 20px; /* Arrondi les bords */
-  outline: none; /* Supprime le contour par défaut */
-  transition: border-color 0.3s ease; /* Transition douce pour le changement de couleur */
+  border-radius: 20px;
+  outline: none;
+  transition: border-color 0.3s ease;
 }
 
 .search-input:focus {
-  border-color: var(--accent-color); /* Change la couleur de la bordure au focus */
+  border-color: var(--accent-color);
 }
-
 
 /* Auth Form Styles */
 .auth-container {
@@ -172,13 +171,13 @@ body {
   padding: 0.75rem;
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 4px;
-  background-color: transparent;
-  color: white;
+  background-color: white;
+  color: var(--text-color);
   outline: none;
 }
 
 .form-group input::placeholder {
-  color: rgba(255, 255, 255, 0.7);
+  color: rgba(0, 0, 0, 0.5);
 }
 
 .form-actions {
@@ -220,6 +219,15 @@ body {
 .error-message {
   background-color: rgba(217, 48, 37, 0.2);
   color: #ff6b6b;
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.success-message {
+  background-color: rgba(15, 157, 88, 0.2);
+  color: var(--success-color);
   padding: 0.5rem;
   border-radius: 4px;
   margin-bottom: 1rem;
@@ -270,7 +278,7 @@ body {
 }
 
 .main-title {
-  font-family: 'Brush Script MT', cursive;
+  font-family: "Brush Script MT", cursive;
   font-size: 2.5rem;
   color: var(--primary-color);
   margin-bottom: 0.5rem;
@@ -318,41 +326,86 @@ body {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
-/*Plats*/
+
+/* Plats */
 .plat-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center; /* Centrer les cartes dans le conteneur */
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 10px;
+  justify-items: center;
 }
 
 .plat-card {
-  margin: 10px; /* Espace entre les cartes */
-  border: 1px solid #ccc; /* Bordure des cartes */
-  padding: 10px; /* Espacement interne des cartes */
-  border-radius: 5px; /* Coins arrondis */
-  cursor: pointer; /* Curseur en main au survol */
-  transition: box-shadow 0.3s; /* Effet de transition pour l'ombre */
+  margin: 0;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .plat-card:hover {
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Ombre au survol */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .plat-image {
-  max-width: 150px; /* Largeur de l'image */
-  max-height: 150px; /* Hauteur de l'image */
-  object-fit: cover; /* Ajuster l'image pour qu'elle couvre la zone */
+  max-width: 100%;
+  height: auto;
+  object-fit: cover;
 }
 
 .plat-name {
-  font-size: 1.2rem; /* Taille du texte pour le nom du plat */
-  margin: 0.5rem 0; /* Marges autour du nom */
+  font-size: 1.2rem;
+  margin: 0.5rem 0;
 }
 
 .plat-price {
-  color: var(--primary-color); /* Utiliser une couleur définie dans les variables CSS */
-  font-weight: bold; /* Mettre le prix en gras */
+  color: var(--primary-color);
+  font-weight: bold;
 }
+
+.action-buttons {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  gap: 8px;
+  margin-top: 1rem;
+}
+
+.reserve-button,
+.back-button {
+  width: 100%;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.reserve-button {
+  background-color: #28a745;
+  color: white;
+}
+
+.reserve-button:hover {
+  background-color: #218838;
+  transform: scale(1.02);
+}
+
+.back-button {
+  background-color: #6c757d;
+  color: white;
+}
+
+.back-button:hover {
+  background-color: #5a6268;
+  transform: scale(1.02);
+}
+
 /* styles/plats.css */
 .plat-detail {
   max-width: 800px;
@@ -395,11 +448,13 @@ body {
   margin-bottom: 1.5rem;
 }
 
-.description, .ingredients {
+.description,
+.ingredients {
   margin-bottom: 2rem;
 }
 
-.description h2, .ingredients h2 {
+.description h2,
+.ingredients h2 {
   font-size: 1.3rem;
   color: var(--primary-color);
   margin-bottom: 0.5rem;
@@ -438,7 +493,8 @@ body {
   color: white;
 }
 
-.loading, .error {
+.loading,
+.error {
   text-align: center;
   padding: 2rem;
   font-weight: bold;
@@ -448,17 +504,110 @@ body {
   color: var(--error-color);
 }
 
+/* Reservation Form Styles */
+.content {
+  max-width: 800px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+h1 {
+  text-align: center;
+  margin-bottom: 20px;
+  font-family: "Brush Script MT", cursive;
+  font-size: 32px;
+  color: var(--primary-color);
+}
+
+.reservation-form {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  padding: 30px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-title {
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--primary-color);
+  font-size: 24px;
+  font-weight: normal;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+input,
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  color: var(--text-color);
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.submit-btn:hover {
+  background-color: var(--secondary-color);
+}
+
+.optional-label {
+  color: #888;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
   .main-title {
     font-size: 2rem;
   }
-  
+
   .description-text {
     font-size: 1rem;
   }
-  
+
   .home-container {
     padding: 1.5rem;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  .reservation-form {
+    padding: 20px;
+  }
+
+  .form-title {
+    font-size: 20px;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    padding: 10px;
+  }
+
+  .submit-btn {
+    padding: 10px;
   }
 }

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { useParams } from 'react-router-dom';
 import { PlatDetailPageProps } from './PlatDetailPageProps';
 import { PlatDetailPageState } from './PlatDetailPageState';
-import PlatsService from '../../services/PlatsService';
+import PlatsService from '../../services/PlatsService/PlatsService';
 import '../../styles/global.css';
 import { Ingredient } from '../../Models/Ingredient';
 import { Plat } from '../../Models/Plat';
@@ -46,7 +46,7 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
             if (isNaN(idPlat)) throw new Error("ID de plat invalide");
     
             // Je récupère un plat depuis le service
-            const platResponse:Plat = await this.platsService.GetPlatByD(idPlat);
+            const platResponse:Plat = await this.platsService.GetPlatByID(idPlat);
             console.log(`platResponse:${platResponse}`);
             console.log(`idPlat:${idPlat}`);
 
@@ -83,10 +83,10 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
         
 
         
-        if (plat.imageBase64) {
-            return <img src={`data:image/jpeg;base64,${plat.imageBase64}`} alt={plat.nom} className="plat-detail-image" />;
-        } else if (plat.image) {
-            return <img src={plat.image} alt={plat.nom} className="plat-detail-image" />;
+        if (plat.ImageBase64) {
+            return <img src={`data:image/jpeg;base64,${plat.ImageBase64}`} alt={plat.Nom} className="plat-detail-image" />;
+        } else if (plat.Image) {
+            return <img src={plat.Image} alt={plat.Nom} className="plat-detail-image" />;
         } else {
             return <div className="plat-image-placeholder">Image non disponible</div>;
         }
@@ -112,18 +112,18 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
         return (
             <div className="home-container">
                 <div className="plat-detail">
-                    <h1 className="main-title">{plat.nom}</h1>
+                    <h1 className="main-title">{plat.Nom}</h1>
                     
                     <div className="plat-image-container">
                         {this.renderImage()}
                     </div>
                     
                     <div className="plat-info">
-                        <p className="plat-price-detail">{plat.prix.toFixed(2)} €</p>
+                        <p className="plat-price-detail">{plat.Prix.toFixed(2)} €</p>
                         
                         <div className="description">
                             <h2>Description</h2>
-                            <p>{plat.description || "Aucune description disponible"}</p>
+                            <p>{plat.Description || "Aucune description disponible"}</p>
                         </div>
                         
                         <div className="ingredients">
@@ -131,7 +131,7 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
                             <ul className="ingredients-list">
                                 {plat.ingredients && plat.ingredients.length > 0 ? (
                                     plat.ingredients.map(ingredient => (
-                                        <li key={ingredient.idIngredient}>{ingredient.nom}</li>
+                                        <li key={ingredient.IdIngredient}>{ingredient.Nom}</li>
                                     ))
                                 ) : (
                                     <p>Aucun ingrédient disponible</p>

@@ -1,19 +1,49 @@
 import React, { Component } from 'react';
 import { HomeProps } from './HomeProps';
-import '../styles/global.css';
+import '../../styles/global.css';
+import { HomeStates } from './HomeStates';
 // import '../styles/home.css';
 
 
-class Home extends Component<HomeProps> {
+class Home extends Component<HomeProps, HomeStates> {
+
+  //Je stocke le timer 
+  private timer: NodeJS.Timeout | null = null; 
+
+
+  constructor(props: HomeProps) {
+      super(props);
+      this.state = {
+        showUsername: true
+      };
+    }
+
+    public componentDidMount(): void {
+        this.timer = setTimeout(() => {
+          this.setState({showUsername: false});
+        }, 5000);
+    }
+
+    public componentWillUnmount(): void {
+      if (this.timer) {
+        clearTimeout(this.timer);
+      }    
+    }
+
+    
   render() {
     const { username } = this.props;
+    const {showUsername} = this.state;
     
     return (
       <div className="home-container">
         <div className="welcome-header">
-          {username && (
+        {showUsername &&(
             <p className="personal-welcome">Bonjour, {username} !</p>
           )}
+          {/* {username && (
+            <p className="personal-welcome">Bonjour, {username} !</p>
+          )} */}
           <h1 className="main-title">Bienvenue chez Zei Home Kitchen</h1>
           
         </div>

@@ -1,4 +1,4 @@
-import IAuthService from "../services/IAuthService";
+import IAuthService from "../../services/AuthService/IAuthService";
 
 export interface AuthFormProps {
   onSuccess: (token: string, username: string) => void;
