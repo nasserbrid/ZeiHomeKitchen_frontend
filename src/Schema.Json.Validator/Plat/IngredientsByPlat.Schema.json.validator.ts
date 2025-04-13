@@ -4,11 +4,11 @@ export const IngredientsByPlatSchema = {
     items: {
       type: "object",
       properties: {
-        IdIngredient: { type: "number" },
-        Nom: { type: "string" },
-        PlatIds: { type: "array", items: { type: "number" } },
+        idIngredient: { type: "number" },
+        nom: { type: "string" },
+        platIds: { type: "array", items: { type: "number" } },
       },
-      required: ["IdIngredient", "Nom"],
+      required: ["idIngredient", "nom"],
       additionalProperties: false,
     },
   };

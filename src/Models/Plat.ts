@@ -2,14 +2,14 @@
 // import { Ingredient } from "./Ingredient";
 
 export type Plat ={
-    IdPlat: number;
-    Nom: string;
-    Description?: string;
-    Prix: number;
-    Image?: string;
-    ImageBase64?: string;
-    IngredientIds: number[];
-    ReservationIds: number[];
+    idPlat: number;
+    nom: string;
+    description?: string;
+    prix: number;
+    image?: string;
+    imageBase64?: string;
+    ingredientIds: number[];
+    //ReservationIds: number[];
     
 }
 
@@ -19,13 +19,13 @@ export type Plat ={
 // }
 
 export type PlatByID = {
-    IdPlat: number;
-    Nom: string;
-    Description?: string;
-    Prix: number;
-    Image?: string;
-    ImageBase64?: string;
-    IngredientIds: number[];
+    idPlat: number;
+    nom: string;
+    description?: string;
+    prix: number;
+    image?: string;
+    imageBase64?: string;
+    ingredientIds: number[];
 }
 
 // export type PlatByIDResponse = {
@@ -33,9 +33,9 @@ export type PlatByID = {
 // }
 
 export type IngredientsByPlatId = {
-    IdIngredient: number;
-    Nom: string;
-    PlatIds: number[];
+    idIngredient: number;
+    nom: string;
+    platIds: number[];
 }
 
 // export type PlatIdIngredientsResponse = {

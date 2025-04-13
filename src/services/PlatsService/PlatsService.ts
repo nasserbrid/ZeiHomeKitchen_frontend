@@ -81,10 +81,10 @@ export default class PlatsService implements IPlatsService {
    * @param IdPlat
    * @returns
    */
-  public async GetPlatByID(IdPlat: number): Promise<Plat> {
+  public async GetPlatByID(idPlat: number): Promise<Plat> {
     try {
       const platById = await this.fetchData<Plat>(
-        `${Constants.API_URL_PLATS}/${IdPlat}`
+        `${Constants.API_URL_PLATS}/${idPlat}`
       );
 
       // Validation des données
@@ -107,10 +107,10 @@ export default class PlatsService implements IPlatsService {
    * @param IdPlat
    * @returns
    */
-  public async GetIngredientsByPlatId(IdPlat: number): Promise<Ingredient[]> {
+  public async GetIngredientsByPlatId(idPlat: number): Promise<Ingredient[]> {
     try {
       const platIdIngredient = await this.fetchData<Ingredient[]>(
-        `${Constants.API_URL_PLATS}/${IdPlat}/ingredients`
+        `${Constants.API_URL_PLATS}/${idPlat}/ingredients`
       );
 
       // Validation des données

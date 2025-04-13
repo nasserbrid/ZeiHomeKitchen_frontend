@@ -24,6 +24,8 @@ export default class UserService implements IUserService {
       });
 
       if (!response.ok) {
+        const errorData = await response.text(); // Récupérer le corps de la réponse en texte
+    console.error(`Erreur lors de la récupération de l'utilisateur. Statut: ${response.status}. Réponse: ${errorData}`);
         throw new Error("Erreur lors de la récupération de l'utilisateur");
       }
 

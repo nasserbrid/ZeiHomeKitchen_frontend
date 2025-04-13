@@ -4,7 +4,7 @@ import { Ingredient } from "../../Models/Ingredient";
 
 export default interface IPlatsService {
   GetAllPlats(): Promise<Plat[]>;
-  GetPlatByID(IdPlat: number): Promise<Plat>;
+  GetPlatByID(idPlat: number): Promise<Plat>;
   // GetPlatIdIngredients(idPlat: number): Promise<Ingredient[]>;
-  GetIngredientsByPlatId(IdPlat: number): Promise<Ingredient[]>;
+  GetIngredientsByPlatId(idPlat: number): Promise<Ingredient[]>;
 }

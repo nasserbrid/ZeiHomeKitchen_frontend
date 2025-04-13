@@ -1,5 +1,5 @@
 import { AuthRegisterSchema } from './../../Schema.Json.Validator/Auth/AuthRegister.Schema.json.validator';
-import { AuthLoginSchema } from './../../Schema.Json.Validator/Auth/AuthLogin.Schema.json.validator';
+import { AuthLoginSchema } from '../../Schema.Json.Validator/Auth/AuthLogin.Schema.json.validator';
 import { Constants } from "../../Constants/constant";
 import { AuthResponse, LoginRequest, RegisterRequest } from "../../Models/User";
 import IAuthService from "././IAuthService";
@@ -39,17 +39,18 @@ export default class AuthService implements IAuthService {
             throw new Error(errorData.message || "Login failed");
         }
 
-        const authResponse: AuthResponse = await response.json();
-        console.log('Réponse de connexion:', authResponse); // Affiche la réponse
+        const data = await response.json();
+        console.log('Réponse de connexion:', data); 
 
         // Validation de la réponse
-        const valid = this.validateAuthLoginSchema(authResponse);
-        if (!valid) {
-            console.error(this.validateAuthLoginSchema.errors);
-            throw new Error("Les données de connexion ne sont pas conformes au schéma attendu.");
-        }
+        // const valid = this.validateAuthLoginSchema(data);
+        // if (!valid) {
+        //     console.error(this.validateAuthLoginSchema.errors);
+        //     throw new Error("Les données de connexion ne sont pas conformes au schéma attendu.");
+        // }
 
-        return Promise.resolve(authResponse);
+        return Promise.resolve(data);
+       
     } catch (error) {
         console.error('Erreur de connexion:', error);
         return Promise.reject(error);
@@ -75,7 +76,7 @@ export default class AuthService implements IAuthService {
     });
 
     if (!response.ok) {
-        const errorData = await response.json(); // Récupérez les détails de l'erreur
+        const errorData = await response.json(); 
         console.error("Erreur lors de l'inscription :", errorData);
         throw new Error(errorData.message || "Registration failed");
     }

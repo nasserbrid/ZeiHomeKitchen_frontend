@@ -3,6 +3,7 @@ import IUserService from "../../services/User/IUserService";
 import "../../styles/global.css";
 import { ReservationPageFormProps } from "./ReservationPageFormProps";
 import { ReservationPageFormState } from "./ReservationPageFormStates";
+import { ReservationStatus } from "../../Models/Reservation";
 
 class ReservationPageForm extends Component<
   ReservationPageFormProps,
@@ -42,7 +43,7 @@ class ReservationPageForm extends Component<
     }));
   }
 
-  handleDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  private handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = new Date(e.target.value);
     this.setState({ DateReservation: selectedDate });
   };
@@ -87,14 +88,16 @@ class ReservationPageForm extends Component<
       IdReservation: 0,
       DateReservation: DateReservation.toISOString(),
       Adresse,
-      Statut: "EnAttente",
+      Statut: ReservationStatus.Annulee,
       Nom,
       Prenom,
       NombrePersonnes,
       PlatIds: PlatIds.length > 0 ? PlatIds : [0],
-      IdStatistique: 0,
-      IdUtilisateur: IdUtilisateur || 0,
+      IdUtilisateur: IdUtilisateur 
     };
+
+    console.log("Statut:", ReservationStatus.Annulee); 
+
 
     console.log("Données de réservation avant envoi:", reservationData);
 

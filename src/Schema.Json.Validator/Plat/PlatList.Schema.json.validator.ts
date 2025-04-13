@@ -4,16 +4,16 @@ export const PlatListSchema = {
   items: {
     type: "object",
     properties: {
-      IdPlat: { type: "number" },
-      Nom: { type: "string" },
-      Description: { type: ["string", "null"] }, // Correction ici
-      Image: { type: ["string", "null"] },
-      Prix: { type: "number" },
-      IngredientIds: { type: "array", items: { type: ["number", "null"] } },
-      ReservationIds: { type: "array", items: { type: ["number", "null"] } }, // Correction ici
-      ImageBase64: { type: ["string", "null"] }
+      idPlat: { type: "number" },
+      nom: { type: "string" },
+      description: { type: ["string", "null"] },
+      image: { type: ["string", "null"] },
+      prix: { type: "number" },
+      ingredientIds: { type: "array", items: { type: ["number", "null"] } },
+     // ReservationIds: { type: "array", items: { type: ["number", "null"] } }, 
+      imageBase64: { type: ["string", "null"] }
     },
-    required: ["IdPlat", "Nom", "Prix", "IngredientIds", "ReservationIds"],
+    required: ["idPlat","nom", "prix", "ingredientIds"],
     additionalProperties: false,
   },
  

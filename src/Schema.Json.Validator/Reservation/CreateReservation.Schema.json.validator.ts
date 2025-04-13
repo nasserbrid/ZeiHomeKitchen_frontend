@@ -10,15 +10,14 @@ export const CreateReservationSchema = {
       Prenom: { type: "string"},
       NombrePersonnes: { type: "number" },
       PlatIds: { type: "array", items: { type: "number"} },
-      IdStatistique: { type: "number" }, // Ajouté ici
-      IdUtilisateur: { type: "number" }  // Ajouté ici
+      IdUtilisateur: { type: "number" }  
     },
     required: ["IdReservation", "DateReservation", 
         "Adresse","Statut",
         "Nom",
         "Prenom",
         "NombrePersonnes",
-        "PlatIds"
+        "PlatIds", "IdUtilisateur"
     ],
     additionalProperties: false,
   };

@@ -111,7 +111,7 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
       //"i" signifie insensible à la casse
       new RegExp(this.state.searchQuery, "i").test(
         //.normalize("NFD").replace(/[\u0300-\u036f]/g, "") permet d'ignorer les accents.
-        plat.Nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Ignore les accents
+        plat.nom.normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Ignore les accents
       )
     );
 
@@ -126,9 +126,9 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
         <div className="plat-container">
           {filteredPlats.map((plat) => (
             <PlatCard
-              key={plat.IdPlat}
+              key={plat.idPlat}
               plat={plat}
-              onPlatClick={() => this.handlePlatClick(plat.IdPlat)}
+              onPlatClick={() => this.handlePlatClick(plat.idPlat)}
               onReserverClick={this.handleReservationClick}
               onBackClick={this.handleBackClick}
               // onPlatClick={this.handlePlatClick}

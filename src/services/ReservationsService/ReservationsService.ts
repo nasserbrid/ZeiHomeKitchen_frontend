@@ -49,6 +49,7 @@ export default class ReservationsService implements IReservationsService {
       //   const errorData = await response.json();
       //   throw new Error(errorData.message || "Request failed");
       // }
+      console.log(`response fetchDataReservation  : ${response}`);
 
       if (!response.ok) {
         const errorText = await response.text(); // Lire le texte brut
@@ -65,6 +66,12 @@ export default class ReservationsService implements IReservationsService {
 
   private async fetchDataRequest<T>(url: string, data: object): Promise<T> {
     const token = localStorage.getItem("token");
+
+    if (!token) {
+      console.error("Aucun token trouvé dans localStorage.");
+      throw new Error("Token manquant");
+    }
+
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -75,9 +82,12 @@ export default class ReservationsService implements IReservationsService {
         mode: "cors",
         body: JSON.stringify(data),
       });
+      console.log(`response fetchDataRequest  : ${response.status} - ${await response.text()}`);
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = await response.json().catch(async () => {
+          return { message: await response.text() }; 
+      });
         console.error("Error lors de la reservation de(s) plat(s)", errorData);
         throw new Error(errorData.message || "Request failed");
       }
@@ -88,6 +98,41 @@ export default class ReservationsService implements IReservationsService {
       throw new Error("Une erreur s'est produite lors de l'envoie des données de reservation de(s) plat(s)");
     }
   }
+
+  // private async fetchDataRequest<T>(url: string, data: object): Promise<T> {
+  //   const token = localStorage.getItem("token");
+
+  //   if (!token) {
+  //     console.error("Aucun token trouvé dans localStorage.");
+  //     throw new Error("Token manquant");
+  //   }
+
+  //   try {
+  //     const response = await fetch(url, {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //         "Authorization": `Bearer ${token}`,
+  //       },
+  //       mode: "cors",
+  //       body: JSON.stringify(data),
+  //     });
+  //     console.log(`response fetchDataRequest  : ${response.status} - ${await response.text()}`);
+
+  //     if (!response.ok) {
+  //       const errorData = await response.json().catch(async () => {
+  //         return { message: await response.text() }; // Pour gérer les cas où la réponse n'est pas JSON
+  //     });
+  //       console.error("Error lors de la reservation de(s) plat(s)", errorData);
+  //       throw new Error(errorData.message || "Request failed");
+  //     }
+
+  //     return await response.json();
+  //   } catch (error) {
+  //     console.error("Fetch error", error);
+  //     throw new Error("Une erreur s'est produite lors de l'envoie des données de reservation de(s) plat(s)");
+  //   }
+  // }
 
   public async GetAllReservations(): Promise<Reservation[]> {
     try {
@@ -108,9 +153,9 @@ export default class ReservationsService implements IReservationsService {
     }
   }
 
-  public async GetReservationById(IdReservation: number): Promise<Reservation> {
+  public async GetReservationById(idReservation: number): Promise<Reservation> {
     try {
-      const reservationById = await this.fetchDataReservation<Reservation>(`${Constants.API_URL_RESERVATIONS}/${IdReservation}`);
+      const reservationById = await this.fetchDataReservation<Reservation>(`${Constants.API_URL_RESERVATIONS}/${idReservation}`);
 
       const valid = this.validateReservation(reservationById);
       if (!valid) {
@@ -126,9 +171,9 @@ export default class ReservationsService implements IReservationsService {
     }
   }
 
-  public async GetReservationForPlats(IdReservation: number): Promise<Reservation> {
+  public async GetReservationForPlats(idReservation: number): Promise<Reservation> {
     try {
-      const reservationForPlats = await this.fetchDataReservation<Reservation>(`${Constants.API_URL_RESERVATIONS}/${IdReservation}/plats`);
+      const reservationForPlats = await this.fetchDataReservation<Reservation>(`${Constants.API_URL_RESERVATIONS}/${idReservation}/plats`);
 
       // Validation des données
       const valid = this.validateReservationForPlats(reservationForPlats);
@@ -151,8 +196,14 @@ export default class ReservationsService implements IReservationsService {
       console.log('Données avant validation :', reservation);
       console.log('Type de NombrePersonnes:', typeof reservation.NombrePersonnes);
       console.log('Type de DateReservation:', typeof reservation.DateReservation);
+      console.log("Type de Statut:", typeof reservation.Statut);
+      console.log("Valeur de Statut:", reservation.Statut);
+
+      console.log('Données à valider :', reservation);
+
       // Validation avant envoi
       const isValid = this.validateCreateReservation(reservation);
+      console.log('Validation résultat:', isValid);
       if (!isValid) {
         console.error(this.validateCreateReservation.errors);
         throw new Error("Les données de la réservation ne sont pas conformes au schéma");

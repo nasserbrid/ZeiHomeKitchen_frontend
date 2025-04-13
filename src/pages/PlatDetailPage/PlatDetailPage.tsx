@@ -62,7 +62,7 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
     
             //Mise à jour du state avec le plat et les ingrédients
             this.setState({
-                plat: { ...platResponse, ingredients: testTableauIngredientData }, // Ajouter les ingrédients au plat
+                plat: { ...platResponse, ingredients: testTableauIngredientData }, 
                 loading: false,
                 error: null,
             });
@@ -83,10 +83,10 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
         
 
         
-        if (plat.ImageBase64) {
-            return <img src={`data:image/jpeg;base64,${plat.ImageBase64}`} alt={plat.Nom} className="plat-detail-image" />;
-        } else if (plat.Image) {
-            return <img src={plat.Image} alt={plat.Nom} className="plat-detail-image" />;
+        if (plat.imageBase64) {
+            return <img src={`data:image/jpeg;base64,${plat.imageBase64}`} alt={plat.nom} className="plat-detail-image" />;
+        } else if (plat.image) {
+            return <img src={plat.image} alt={plat.nom} className="plat-detail-image" />;
         } else {
             return <div className="plat-image-placeholder">Image non disponible</div>;
         }
@@ -112,18 +112,18 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
         return (
             <div className="home-container">
                 <div className="plat-detail">
-                    <h1 className="main-title">{plat.Nom}</h1>
+                    <h1 className="main-title">{plat.nom}</h1>
                     
                     <div className="plat-image-container">
                         {this.renderImage()}
                     </div>
                     
                     <div className="plat-info">
-                        <p className="plat-price-detail">{plat.Prix.toFixed(2)} €</p>
+                        <p className="plat-price-detail">{plat.prix.toFixed(2)} €</p>
                         
                         <div className="description">
                             <h2>Description</h2>
-                            <p>{plat.Description || "Aucune description disponible"}</p>
+                            <p>{plat.description || "Aucune description disponible"}</p>
                         </div>
                         
                         <div className="ingredients">
@@ -131,7 +131,7 @@ class PlatDetailPage extends Component<PlatDetailPageProps, PlatDetailPageState>
                             <ul className="ingredients-list">
                                 {plat.ingredients && plat.ingredients.length > 0 ? (
                                     plat.ingredients.map(ingredient => (
-                                        <li key={ingredient.IdIngredient}>{ingredient.Nom}</li>
+                                        <li key={ingredient.idIngredient}>{ingredient.nom}</li>
                                     ))
                                 ) : (
                                     <p>Aucun ingrédient disponible</p>
