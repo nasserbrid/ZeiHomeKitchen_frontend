@@ -1,5 +1,4 @@
 import { Reservation } from "../../Models/Reservation";
-
 export default interface IReservationsService {
   GetAllReservations(): Promise<Reservation[]>;
   GetReservationById(idReservation: number): Promise<Reservation>;

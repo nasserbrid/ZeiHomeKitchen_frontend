@@ -66,12 +66,12 @@ export default class ReservationsService implements IReservationsService {
 
   private async fetchDataRequest<T>(url: string, data: object): Promise<T> {
     const token = localStorage.getItem("token");
-
+  
     if (!token) {
       console.error("Aucun token trouvé dans localStorage.");
       throw new Error("Token manquant");
     }
-
+  
     try {
       const response = await fetch(url, {
         method: "POST",
@@ -82,63 +82,33 @@ export default class ReservationsService implements IReservationsService {
         mode: "cors",
         body: JSON.stringify(data),
       });
-      console.log(`response fetchDataRequest  : ${response.status} - ${await response.text()}`);
-
+      
+      // Cloner la réponse pour pouvoir la lire plusieurs fois
+      const responseClone = response.clone();
+      console.log(`response fetchDataRequest reservation  : ${response.status} - ${await responseClone.text()}`);
+  
       if (!response.ok) {
         const errorData = await response.json().catch(async () => {
           return { message: await response.text() }; 
-      });
+        });
         console.error("Error lors de la reservation de(s) plat(s)", errorData);
         throw new Error(errorData.message || "Request failed");
       }
-
+  
       return await response.json();
     } catch (error) {
       console.error("Fetch error", error);
       throw new Error("Une erreur s'est produite lors de l'envoie des données de reservation de(s) plat(s)");
     }
   }
-
-  // private async fetchDataRequest<T>(url: string, data: object): Promise<T> {
-  //   const token = localStorage.getItem("token");
-
-  //   if (!token) {
-  //     console.error("Aucun token trouvé dans localStorage.");
-  //     throw new Error("Token manquant");
-  //   }
-
-  //   try {
-  //     const response = await fetch(url, {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         "Authorization": `Bearer ${token}`,
-  //       },
-  //       mode: "cors",
-  //       body: JSON.stringify(data),
-  //     });
-  //     console.log(`response fetchDataRequest  : ${response.status} - ${await response.text()}`);
-
-  //     if (!response.ok) {
-  //       const errorData = await response.json().catch(async () => {
-  //         return { message: await response.text() }; // Pour gérer les cas où la réponse n'est pas JSON
-  //     });
-  //       console.error("Error lors de la reservation de(s) plat(s)", errorData);
-  //       throw new Error(errorData.message || "Request failed");
-  //     }
-
-  //     return await response.json();
-  //   } catch (error) {
-  //     console.error("Fetch error", error);
-  //     throw new Error("Une erreur s'est produite lors de l'envoie des données de reservation de(s) plat(s)");
-  //   }
-  // }
+  
+  
 
   public async GetAllReservations(): Promise<Reservation[]> {
     try {
       const reservations = await this.fetchDataReservation<Reservation[]>(`${Constants.API_URL_RESERVATIONS}`);
 
-      // Validation des données
+     
       const valid = this.validateReservationList(reservations);
       if (!valid) {
         console.error(this.validateReservationList.errors);

@@ -11,6 +11,7 @@ class PlatCard extends Component<PlatCardProps> {
         this.handleClick = this.handleClick.bind(this);
         this.handleBackClick = this.handleBackClick.bind(this);
         this.handleReservationClick = this.handleReservationClick.bind(this);
+        this.handleToggleSelection = this.handleToggleSelection.bind(this);
     }
     
     // private handleClick = (): void => {
@@ -33,6 +34,14 @@ class PlatCard extends Component<PlatCardProps> {
         console.log('Retour au catalogue');
         this.props.onBackClick();
     }
+
+
+    private handleToggleSelection(event: React.MouseEvent<HTMLInputElement>): void {
+        event.stopPropagation(); // Empêcher le clic de se propager à la carte
+        if (this.props.onToggleSelection) {
+            this.props.onToggleSelection(this.props.plat.idPlat);
+        }
+    }
     //ReactNode un tableau de balise qui est retournée
     private renderImage(): React.ReactNode {
         const { plat } = this.props;
@@ -51,10 +60,19 @@ class PlatCard extends Component<PlatCardProps> {
     }
 
     render() {
-        const { plat } = this.props;
+        const { plat, isSelected } = this.props;
         
         return (
-            <div className="plat-card" onClick={this.handleClick}>
+            <div className={`plat-card ${isSelected ? 'selected' : ''}`} onClick={this.handleClick}>
+                <div className="plat-selection" onClick={(e) => e.stopPropagation()}>
+                    <input 
+                        type="checkbox" 
+                        checked={isSelected || false}
+                        onChange={(e) => this.handleToggleSelection(e as any)}
+                        id={`select-plat-${plat.idPlat}`}
+                    />
+                    <label htmlFor={`select-plat-${plat.idPlat}`}>Sélectionner</label>
+                </div>
                 <h3 className="plat-name">{plat.nom}</h3>
                 {this.renderImage()}
                 

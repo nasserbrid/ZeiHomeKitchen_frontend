@@ -1,12 +1,16 @@
+import { Reservation } from "../../Models/Reservation";
+
 export type ReservationPageFormState ={
-    DateReservation: Date,
-    Nom:string,
-    Prenom:string,
-    Adresse:string,
-    NombrePersonnes: number,
-    PlatIds: number[],
+    dateReservation: Date,
+    nom:string,
+    prenom:string,
+    adresse:string,
+    nombrePersonnes: number,
+    platIds: number[],
     error: string | null;
     loading: boolean;
     successMessage: string;
-    IdUtilisateur: number
+    idUtilisateur: number;
+    reservationCreated: Reservation | null;
+    showPaymentModal:boolean;
   }

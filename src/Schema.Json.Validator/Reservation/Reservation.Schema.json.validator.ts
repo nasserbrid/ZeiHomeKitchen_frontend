@@ -1,4 +1,3 @@
-// Schema.Json.Validator/Reservation/Reservation.Schema.json.validator.ts
 export const ReservationSchema = {
     type: "object",
     properties: {

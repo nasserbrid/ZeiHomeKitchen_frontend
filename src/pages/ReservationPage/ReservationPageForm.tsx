@@ -1,9 +1,10 @@
 import { ChangeEvent, Component, FormEvent } from "react";
+import { ReservationStatus } from "../../Models/Reservation";
 import IUserService from "../../services/User/IUserService";
 import "../../styles/global.css";
 import { ReservationPageFormProps } from "./ReservationPageFormProps";
 import { ReservationPageFormState } from "./ReservationPageFormStates";
-import { ReservationStatus } from "../../Models/Reservation";
+import PaiementFormModal from "../../components/Paiement/PaiementFormModal";
 
 class ReservationPageForm extends Component<
   ReservationPageFormProps,
@@ -23,6 +24,8 @@ class ReservationPageForm extends Component<
       loading: false,
       successMessage: "",
       IdUtilisateur: 0,
+      reservationCreated: null, 
+      showPaymentModal: false,  
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -46,7 +49,7 @@ class ReservationPageForm extends Component<
   private handleDateChange(e: React.ChangeEvent<HTMLInputElement>) {
     const selectedDate = new Date(e.target.value);
     this.setState({ DateReservation: selectedDate });
-  };
+  }
 
   // Méthode pour gérer la soumission du formulaire
   private async handleSubmit(event: FormEvent) {
@@ -83,84 +86,63 @@ class ReservationPageForm extends Component<
       return;
     }
 
+    //Je vérifie que des plats ont été sélectionnés
+    if (!PlatIds || PlatIds.length === 0) {
+      this.setState({ error: "Veuillez sélectionner au moins un plat." });
+      return;
+    }
+
     // Construction de l'objet selon le format attendu par le backend
     const reservationData = {
       IdReservation: 0,
       DateReservation: DateReservation.toISOString(),
       Adresse,
-      Statut: ReservationStatus.Annulee,
+      Statut: ReservationStatus.Confirmee,
       Nom,
       Prenom,
       NombrePersonnes,
-      PlatIds: PlatIds.length > 0 ? PlatIds : [0],
-      IdUtilisateur: IdUtilisateur 
+      // PlatIds: PlatIds.length > 0 ? PlatIds : [0],
+      PlatIds: PlatIds,
+      IdUtilisateur: IdUtilisateur,
     };
 
-    console.log("Statut:", ReservationStatus.Annulee); 
-
+    console.log("Statut:", ReservationStatus.Annulee);
 
     console.log("Données de réservation avant envoi:", reservationData);
 
     this.setState({ loading: true, error: null });
 
     try {
-      const createdReservation =
-        await this.props.reservationService.CreateReservation(reservationData);
+      const createdReservation = await this.props.reservationService.CreateReservation(reservationData);
       console.log("Réservation créée:", createdReservation);
+    
+      if (!createdReservation || createdReservation.IdReservation <=0) {
+        throw new Error("La réservation n'a pas pu être créée correctement.");
+      }
+
+      console.log("createdReservation retournée:", createdReservation);
       this.setState({
         successMessage: "Réservation créée avec succès !",
-        // Réinitialisation le formulaire
+        // Réinitialisation du formulaire
         Nom: "",
         Prenom: "",
         Adresse: "",
         NombrePersonnes: 0,
         DateReservation: new Date(),
+        reservationCreated: createdReservation,
+        // Affichage de la pop-up pour le paiement
+        showPaymentModal: true,
       });
     } catch (error) {
-      console.error("Erreur:", error);
-      this.setState({ error: "Erreur lors de la création de la réservation" });
+      console.error("Erreur lors de la création de la réservation:", error);
+      this.setState({
+        error: "Une erreur est survenue lors de la création de la réservation. Veuillez réessayer.",
+      });
     } finally {
       this.setState({ loading: false });
     }
+    
   }
-  // private async handleSubmit(event: FormEvent) {
-  //     event.preventDefault(); // Empêche le comportement par défaut du formulaire
-  //     const { DateReservation, Nom, Prenom, Adresse, NombrePersonnes, IdUtilisateur, PlatIds } = this.state; // Extraction des valeurs de l'état
-
-  //     if (NombrePersonnes <= 0) {
-  //         this.setState({ error: "Le nombre de personnes doit être supérieur à 0." });
-  //         return;
-  //     }
-
-  //     // Préparation des données de réservation à envoyer au service
-  //     const reservationData = {
-  //         IdReservation: 0, // À générer par le backend ou une logique
-  //         DateReservation: DateReservation.toISOString(), // Conversion au format ISO (string)
-  //         Nom,
-  //         Prenom,
-  //         Adresse,
-  //         Statut: "EnAttente", // Statut par défaut de la réservation
-  //         IdUtilisateur, // Utilisation de l'ID de l'utilisateur connecté
-  //         IdStatistique: undefined, // Ou laisse cette propriété de côté, car elle sera définie côté backend
-  //         NombrePersonnes,
-  //         PlatIds: PlatIds.length > 0 ? PlatIds : [0] // Tableau des IDs des plats sélectionnés
-  //     };
-
-  //     console.log('Données de réservation avant validation :', reservationData);
-
-  //     this.setState({ loading: true, error: null }); // Mise à jour de l'état pour indiquer le début du chargement
-
-  //     try {
-  //         const createdReservation = await this.props.reservationService.CreateReservation(reservationData);
-  //         console.log(`createdReservation : ${createdReservation}`);
-  //         this.setState({ successMessage: "Réservation créée avec succès !" }); // Mise à jour du message de succès
-  //     } catch (error) {
-  //         this.setState({ error: "Erreur lors de la création d'une réservation" }); // Mise à jour de l'état en cas d'erreur
-  //         console.error(error); // Journalisation de l'erreur
-  //     } finally {
-  //         this.setState({ loading: false }); // Réinitialisation de l'état de chargement
-  //     }
-  // }
 
   // Méthode appelée lors du montage du composant pour charger les informations utilisateur et les réservations
   public async componentDidMount() {
@@ -191,9 +173,23 @@ class ReservationPageForm extends Component<
         console.warn("Aucun utilisateur connecté");
       }
 
+      // Récupérer les plats sélectionnés de localStorage
+      const selectedPlatsJson = localStorage.getItem(
+        "selectedPlatsForReservation"
+      );
+      if (selectedPlatsJson) {
+        const selectedPlatIds = JSON.parse(selectedPlatsJson);
+        if (Array.isArray(selectedPlatIds) && selectedPlatIds.length > 0) {
+          // Mise à jour de l'état avec les plats sélectionnés
+          this.setState({ PlatIds: selectedPlatIds });
+          console.log("Plats sélectionnés récupérés:", selectedPlatIds);
+        }
+      }
+
       // Récupération des réservations (pour référence ou affichage)
       const reservations =
         await this.props.reservationService.GetAllReservations();
+        
       console.log("Réservations récupérées:", reservations);
     } catch (error) {
       console.error("Erreur lors du chargement des données:", error);
@@ -217,6 +213,7 @@ class ReservationPageForm extends Component<
   //     }
   // }
 
+  
   // Méthode de rendu du composant
   public render() {
     const {
@@ -293,6 +290,15 @@ class ReservationPageForm extends Component<
               </button>
             </div>
           </form>
+
+          
+         
+          {this.state.showPaymentModal && this.state.reservationCreated && (
+  <PaiementFormModal
+    idReservation={this.state.reservationCreated.idReservation}  
+    onClose={() => this.setState({ showPaymentModal: false })}
+  />
+)}
 
           {error && <p className="error-message">{error}</p>}
           {successMessage && (

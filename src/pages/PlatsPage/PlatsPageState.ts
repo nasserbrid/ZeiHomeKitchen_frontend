@@ -5,4 +5,5 @@ export type PlatsPageState ={
   loading: boolean;
   error: string | null;
   searchQuery: string;
+  selectedPlatIds: number[];
 }

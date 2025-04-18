@@ -24,6 +24,7 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
       loading: true,
       error: null,
       searchQuery: "",
+      selectedPlatIds: []
     };
     this.platsService = new PlatsService();
 
@@ -35,6 +36,7 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
 
     this.handleBackClick = this.handleBackClick.bind(this);
     this.handleReservationClick = this.handleReservationClick.bind(this);
+    this.togglePlatSelection = this.togglePlatSelection.bind(this);
   }
 
   public async componentDidMount() {
@@ -80,9 +82,45 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
     this.props.navigate?.(`/plats/${idPlat}`);
   }
 
+  private togglePlatSelection(platId: number): void {
+    this.setState(prevState => {
+      const { selectedPlatIds } = prevState;
+      
+      // Vérifier si le plat est déjà sélectionné
+      const isSelected = selectedPlatIds.includes(platId);
+      
+      if (isSelected) {
+        // Si déjà sélectionné, on le retire
+        return {
+          selectedPlatIds: selectedPlatIds.filter(id => id !== platId)
+        };
+      } else {
+        // Sinon, on l'ajoute
+        return {
+          selectedPlatIds: [...selectedPlatIds, platId]
+        };
+      }
+    });
+  }
+
+  // private handleReservationClick(): void {
+  //   console.log("Réserver le plat");
+  //   //window.location.href = '/reservation';
+  //   this.props.navigate?.("/reservation");
+  // }
+
   private handleReservationClick(): void {
-    console.log("Réserver le plat");
-    //window.location.href = '/reservation';
+    const { selectedPlatIds } = this.state;
+    
+    if (selectedPlatIds.length === 0) {
+      alert("Veuillez sélectionner au moins un plat avant de réserver.");
+      return;
+    }
+    
+    // Stocker les plats sélectionnés dans localStorage
+    localStorage.setItem('selectedPlatsForReservation', JSON.stringify(selectedPlatIds));
+    
+    console.log("Plats sélectionnés pour réservation:", selectedPlatIds);
     this.props.navigate?.("/reservation");
   }
 
@@ -123,6 +161,20 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
           <h1 className="main-title">Catalogue de plats</h1>
         </div>
 
+        {/* Barre d'information pour les plats sélectionnés */}
+      {this.state.selectedPlatIds.length > 0 && (
+        <div className="selected-plats-info">
+          <p>{this.state.selectedPlatIds.length} plat(s) sélectionné(s)</p>
+          <button 
+            className="reserve-selected-button"
+            onClick={this.handleReservationClick}
+          >
+            Réserver les plats sélectionnés
+          </button>
+        </div>
+      )}
+
+
         <div className="plat-container">
           {filteredPlats.map((plat) => (
             <PlatCard
@@ -131,7 +183,7 @@ class PlatsPage extends Component<PlatsPageProps, PlatsPageState> {
               onPlatClick={() => this.handlePlatClick(plat.idPlat)}
               onReserverClick={this.handleReservationClick}
               onBackClick={this.handleBackClick}
-              // onPlatClick={this.handlePlatClick}
+              onToggleSelection={this.togglePlatSelection}
             />
           ))}
         </div>
