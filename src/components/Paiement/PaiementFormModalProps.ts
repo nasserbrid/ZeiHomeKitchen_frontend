@@ -1,7 +1,7 @@
-import { PaiementFront } from "../../Models/Paiement";
+import { Paiement } from "../../Models/Paiement";
 
 export interface PaiementFormModalProps {
-  paiement?: PaiementFront;
+  paiement?: Paiement;
   idReservation: number;
   onClose: () => void;
 }

@@ -3,7 +3,7 @@ import { Constants } from "../../Constants/constant";
 import { ReservationSchema } from "../../Schema.Json.Validator/Reservation/Reservation.Schema.json.validator";
 import { ReservationForPlatsSchema } from "../../Schema.Json.Validator/Reservation/ReservationForPlats.Schema.json.validator";
 import { ReservationListSchema } from "../../Schema.Json.Validator/Reservation/ReservationList.Schema.json.validator";
-import { Reservation } from "../../Models/Reservation";
+import { fromApi, Reservation, ReservationFromApi, ReservationFront } from "../../Models/Reservation";
 import { CreateReservationSchema } from "../../Schema.Json.Validator/Reservation/CreateReservation.Schema.json.validator";
 import IReservationsService from "./IReservationsService";
 
@@ -160,7 +160,7 @@ export default class ReservationsService implements IReservationsService {
     }
   }
 
-  public async CreateReservation(reservation: Reservation): Promise<Reservation> {
+  public async CreateReservation(reservation: Reservation): Promise<ReservationFront> {
     try {
       
       console.log('Données avant validation :', reservation);
@@ -180,13 +180,13 @@ export default class ReservationsService implements IReservationsService {
       }
 
       // Envoi de la requête avec les données
-      const createdReservation = await this.fetchDataRequest<Reservation>(
+      const createdReservation = await this.fetchDataRequest<ReservationFromApi>(
         `${Constants.API_URL_RESERVATIONS}`,
         reservation
       );
 
       console.log("createdReservation",createdReservation);
-      return Promise.resolve(createdReservation);
+      return Promise.resolve(fromApi(createdReservation));
     } catch (error) {
       console.error("Erreur lors de la création de la réservation", error);
       return Promise.reject(error);

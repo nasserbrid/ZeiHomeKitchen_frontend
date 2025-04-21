@@ -1,16 +1,17 @@
-import { Reservation } from "../../Models/Reservation";
+import { ReservationFront } from './../../Models/Reservation';
+// import { ReservationFront } from "../../Models/Reservation";
 
 export type ReservationPageFormState ={
-    dateReservation: Date,
-    nom:string,
-    prenom:string,
-    adresse:string,
-    nombrePersonnes: number,
-    platIds: number[],
+    DateReservation: Date,
+    Nom:string,
+    Prenom:string,
+    Adresse:string,
+    NombrePersonnes: number,
+    PlatIds: number[],
     error: string | null;
     loading: boolean;
     successMessage: string;
-    idUtilisateur: number;
-    reservationCreated: Reservation | null;
+    IdUtilisateur: number;
+    reservationCreated: ReservationFront | null;
     showPaymentModal:boolean;
   }

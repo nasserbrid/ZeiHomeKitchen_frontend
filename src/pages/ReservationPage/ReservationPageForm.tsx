@@ -1,5 +1,5 @@
 import { ChangeEvent, Component, FormEvent } from "react";
-import { ReservationStatus } from "../../Models/Reservation";
+import {ReservationFront, ReservationStatus } from "../../Models/Reservation";
 import IUserService from "../../services/User/IUserService";
 import "../../styles/global.css";
 import { ReservationPageFormProps } from "./ReservationPageFormProps";
@@ -24,7 +24,7 @@ class ReservationPageForm extends Component<
       loading: false,
       successMessage: "",
       IdUtilisateur: 0,
-      reservationCreated: null, 
+      reservationCreated: null as ReservationFront | null , 
       showPaymentModal: false,  
     };
 
@@ -116,7 +116,7 @@ class ReservationPageForm extends Component<
       const createdReservation = await this.props.reservationService.CreateReservation(reservationData);
       console.log("Réservation créée:", createdReservation);
     
-      if (!createdReservation || createdReservation.IdReservation <=0) {
+      if (!createdReservation || createdReservation.idReservation <=0) {
         throw new Error("La réservation n'a pas pu être créée correctement.");
       }
 
@@ -130,6 +130,7 @@ class ReservationPageForm extends Component<
         NombrePersonnes: 0,
         DateReservation: new Date(),
         reservationCreated: createdReservation,
+        // reservationCreated: fromApi(createdReservation),
         // Affichage de la pop-up pour le paiement
         showPaymentModal: true,
       });
@@ -295,7 +296,8 @@ class ReservationPageForm extends Component<
          
           {this.state.showPaymentModal && this.state.reservationCreated && (
   <PaiementFormModal
-    idReservation={this.state.reservationCreated.idReservation}  
+    idReservation={this.state.reservationCreated.idReservation} 
+     
     onClose={() => this.setState({ showPaymentModal: false })}
   />
 )}

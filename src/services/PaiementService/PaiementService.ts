@@ -96,9 +96,7 @@ export default class PaiementService implements IPaiementService {
 
   public async GetAllPaiements(): Promise<Paiement[]> {
     try {
-      const paiements = await this.fetchDataPaiement<Paiement[]>(
-        `${Constants.API_URL_PAIEMENT}`
-      );
+      const paiements = await this.fetchDataPaiement<Paiement[]>(`${Constants.API_URL_PAIEMENT}`);
 
       
       const valid = this.validatePaiementList(paiements);
